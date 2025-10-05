@@ -1,7 +1,9 @@
 name: Send Test Email
 
 on:
-  workflow_dispatch:  # manual trigger
+  schedule:
+    - cron: '0 6 * * *'  # Runs at 6:00 AM UTC daily
+  workflow_dispatch:     # Allows manual trigger
 
 jobs:
   send-email:
