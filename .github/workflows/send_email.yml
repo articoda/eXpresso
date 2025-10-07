@@ -18,7 +18,7 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install --upgrade pip
+        run: pip install --upgrade pip && pip install requests
 
       - name: Write email opening
         run: echo "This is your second round of test emails\n\nHere are the interesting entries from the arXiv\n" > body.txt
