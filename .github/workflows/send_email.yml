@@ -37,7 +37,6 @@ jobs:
             echo "$result" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
 
-
   send-email:
     runs-on: ubuntu-latest
     needs: generate-body
