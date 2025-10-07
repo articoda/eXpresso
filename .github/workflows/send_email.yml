@@ -8,7 +8,9 @@ on:
 jobs:
   generate-body:
     runs-on: ubuntu-latest
-
+    outputs:
+      output1: ${{ steps.opening.outputs }}
+      output2: ${{ steps.arXiv.outputs }}
     steps:
       - uses: actions/checkout@v3
 
@@ -21,17 +23,23 @@ jobs:
         run: pip install --upgrade pip && pip install requests  && pip install feedparser
 
       - name: Write email opening
-        run: echo "This is your second round of test emails\n\nHere are the interesting entries from the arXiv\n" > body.txt
+        id: opening
+        run: echo "This is your second round of test emails\n\nHere are the interesting entries from the arXiv\n" >> "$GITHUB_OUTPUT"
 
       - name: Check the arXiv
-        run: python3 arxiv_query.py authors_list >> body.txt
+        id: arXiv
+        run: python3 arxiv_query.py authors_list >> "$GITHUB_OUTPUT"
 
 
   send-email:
     runs-on: ubuntu-latest
+    needs: generate-body
 
     steps:
       - uses: actions/checkout@v3
+      - env:
+          OUTPUT1: ${{needs.generate-body.outputs.output1}}
+          OUTPUT2: ${{needs.generate-body.outputs.output2}}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -46,5 +54,5 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: python send_test_email.py
+        run: python send_test_email.py $OUTPUT1 $OUTPUT2
 
