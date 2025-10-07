@@ -30,8 +30,8 @@ jobs:
           echo "output1=This is your second round of test emails\n\nHere are the interesting entries from the arXiv\n" >> $GITHUB_OUTPUT
 
       - name: Check the arXiv
-          id: arXiv
-          run: |
+        id: arXiv
+        run: |
             result=$(python3 arxiv_query.py authors_list)
             echo "output2<<EOF" >> $GITHUB_OUTPUT
             echo "$result" >> $GITHUB_OUTPUT
