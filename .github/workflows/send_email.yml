@@ -3,14 +3,14 @@ name: Send Test Email
 on:
   schedule:
     - cron: '0 6 * * *'  # Runs at 6:00 AM UTC daily
-  workflow_dispatch:     # Allows manual trigger
+  workflow_dispatch:
 
 jobs:
   generate-body:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.opening.outputs }}
-      output2: ${{ steps.arXiv.outputs }}
+      output1: ${{ steps.opening.outputs.output1 }}
+      output2: ${{ steps.arXiv.outputs.output2 }}
     steps:
       - uses: actions/checkout@v3
 
@@ -20,16 +20,20 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install --upgrade pip && pip install requests  && pip install feedparser
+        run: |
+          pip install --upgrade pip
+          pip install requests feedparser
 
       - name: Write email opening
         id: opening
-        run: echo "This is your second round of test emails\n\nHere are the interesting entries from the arXiv\n" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "output1=This is your second round of test emails\n\nHere are the interesting entries from the arXiv\n" >> $GITHUB_OUTPUT
 
       - name: Check the arXiv
         id: arXiv
-        run: python3 arxiv_query.py authors_list >> "$GITHUB_OUTPUT"
-
+        run: |
+          result=$(python3 arxiv_query.py authors_list)
+          echo "output2=$result" >> $GITHUB_OUTPUT
 
   send-email:
     runs-on: ubuntu-latest
@@ -37,9 +41,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - env:
-          OUTPUT1: ${{needs.generate-body.outputs.output1}}
-          OUTPUT2: ${{needs.generate-body.outputs.output2}}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -54,5 +55,6 @@ jobs:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: python send_test_email.py $OUTPUT1 $OUTPUT2
-
+          OUTPUT1: ${{ needs.generate-body.outputs.output1 }}
+          OUTPUT2: ${{ needs.generate-body.outputs.output2 }}
+        run: python send_test_email.py "$OUTPUT1" "$OUTPUT2"
