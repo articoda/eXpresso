@@ -1,27 +1,17 @@
-1) How to get an interacting conformal line defect for free theories by Samuel Bartlett-Tisdall, Dongsheng Ge, Christopher P. Herzog
-hep-th
-http://arxiv.org/abs/2510.02871v1
-Published at 2025-10-03T10:16:43Z
-----------------------------------------------------------------
-2) High-Energy Evolution of Power-Suppressed Amplitudes by Maximilian Delto, Alexander Penin, Lorenzo Tancredi
+This is your second round of test emails
+
+Here are the interesting entries from the arXiv
+
+1) High-Energy Evolution of Power-Suppressed Amplitudes
+by Maximilian Delto, Alexander Penin, Lorenzo Tancredi
 hep-ph
 http://arxiv.org/abs/2510.04914v1
 Published at 2025-10-06T15:30:02Z
 ----------------------------------------------------------------
-3) One-Loop Effects in the Neutrino Matter Potential and Implications for
-  Non-Standard Interactions by Jihong Huang, Tommy Ohlsson, Sampsa Vihonen, Shun Zhou
+2) One-Loop Effects in the Neutrino Matter Potential and Implications for
+  Non-Standard Interactions
+by Jihong Huang, Tommy Ohlsson, Sampsa Vihonen, Shun Zhou
 hep-ph
 http://arxiv.org/abs/2510.04841v1
 Published at 2025-10-06T14:25:57Z
-----------------------------------------------------------------
-4) Multi-dimensional chaos I: Classical and quantum mechanics by Massimo Bianchi, Maurizio Firrotta, Jacob Sonnenschein, Dorin Weissman
-hep-th, nlin.CD
-http://arxiv.org/abs/2510.03007v1
-Published at 2025-10-03T13:51:38Z
-----------------------------------------------------------------
-5) Effects of hadronic molecule $N(2080)3/2^-$ on $K^{*+}Λ$
-  photoproduction by Wen-Ya Tian, Neng-Chang Wei, Yu-Fei Wang, Fei Huang, Bing-Song Zou
-hep-ph, nucl-th
-http://arxiv.org/abs/2510.03673v1
-Published at 2025-10-04T05:00:46Z
 ----------------------------------------------------------------

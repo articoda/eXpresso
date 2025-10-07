@@ -6,8 +6,8 @@ import requests
 from datetime import datetime, timedelta
 
 #HERE GENERATE TIME INTERVAL
-today = datetime.now().strftime("%Y%m%d")+'0001'
-yesterday = (datetime.today() - timedelta(days=4)).strftime("%Y%m%d")+'0001'
+today = datetime.now().strftime("%Y%m%d")+'0600'
+yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y%m%d")+'0001'
 time_interval = "submittedDate:[{}+TO+{}]".format(yesterday,today)
 
 #ASSEMBLE QUERY WITH CATEGORIES, TIME INTERVAL AND AUTHORS
@@ -53,7 +53,7 @@ for entry in feed.entries:
     article_tags = '%s' % ', '.join(tag.term for tag in entry.tags)
 
 
-    print ("{}) {} by {}".format(counter,article_title,article_authors))
+    print ("{}) {}\nby {}".format(counter,article_title,article_authors))
     print ("{}\n{}".format(article_tags, article_link))
     print ("Published at {}".format(article_published_at))
     print("-"*64)
