@@ -7,7 +7,13 @@ from datetime import datetime, timedelta
 
 #HERE GENERATE TIME INTERVAL
 today = datetime.now().strftime("%Y%m%d")+'0600'
-yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y%m%d")+'0001'
+
+day_of_week = datetime.today().weekday()
+if day_of_week == 0:
+    yesterday = (datetime.today() - timedelta(days=4)).strftime("%Y%m%d")+'0001'
+else:
+    yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y%m%d")+'0001'
+
 time_interval = "submittedDate:[{}+TO+{}]".format(yesterday,today)
 
 #ASSEMBLE QUERY WITH CATEGORIES, TIME INTERVAL AND AUTHORS
