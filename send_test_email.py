@@ -14,7 +14,7 @@ TO_ADDRESS = os.getenv('EMAIL_TO')
 
 # Create a text/plain message
 msg = EmailMessage()
-msg['Subject'] = 'eXpresso0.2'
+msg['Subject'] = 'eXpresso0.3'
 msg['From'] = EMAIL_ADDRESS
 msg['To'] = TO_ADDRESS
 msg.set_content('{}\n{}'.format(sys.argv[1],sys.argv[2]))
