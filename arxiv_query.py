@@ -44,7 +44,8 @@ if response.status_code!=200:
 
 import feedparser
 
-feed = feedparser.parse(response.url)
+#feed = feedparser.parse(response.url)
+feed = feedparser.parse(response.text)
 
 feed_entries = feed.entries
 counter = 1
