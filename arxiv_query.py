@@ -12,7 +12,7 @@ day_of_week = datetime.today().weekday()
 if day_of_week == 0:
     yesterday = (datetime.today() - timedelta(days=4)).strftime("%Y%m%d")+'0001'
 else:
-    yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y%m%d")+'0001'
+    yesterday = (datetime.today() - timedelta(days=2)).strftime("%Y%m%d")+'0001'
 
 time_interval = "submittedDate:[{}+TO+{}]".format(yesterday,today)
 
