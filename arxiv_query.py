@@ -6,7 +6,7 @@ import requests
 from datetime import datetime, timedelta
 
 #HERE GENERATE TIME INTERVAL
-today = datetime.now().strftime("%Y%m%d")+'0400'
+today = datetime.now().strftime("%Y%m%d")+'0600'
 
 day_of_week = datetime.today().weekday()
 if day_of_week == 0:
