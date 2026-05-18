@@ -1,69 +1,72 @@
 #!/usr/bin/env python
 
-
 import sys
 import requests
+import time
+import feedparser
 from datetime import datetime, timedelta
 
-#HERE GENERATE TIME INTERVAL
-today = datetime.now().strftime("%Y%m%d")+'0600'
+def chunk_list(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
 
+# 1. GENERATE TIME INTERVAL
+today = datetime.now().strftime("%Y%m%d") + '0600'
 day_of_week = datetime.today().weekday()
+
 if day_of_week == 0:
-    yesterday = (datetime.today() - timedelta(days=4)).strftime("%Y%m%d")+'0001'
+    yesterday = (datetime.today() - timedelta(days=4)).strftime("%Y%m%d") + '0001'
 else:
-    yesterday = (datetime.today() - timedelta(days=2)).strftime("%Y%m%d")+'0001'
+    yesterday = (datetime.today() - timedelta(days=2)).strftime("%Y%m%d") + '0001'
 
-time_interval = "submittedDate:[{}+TO+{}]".format(yesterday,today)
+time_interval = "submittedDate:[{}+TO+{}]".format(yesterday, today)
+categories = "%28cat:hep-th+OR+cat:hep-ph%29"
 
-#ASSEMBLE QUERY WITH CATEGORIES, TIME INTERVAL AND AUTHORS
-categories = "%28"+"cat:hep-th"+"+OR+"+"cat:hep-ph"+"%29"
-
-##AUTHORS ARE GENERATED FROM LIST GIVEN TO SCRIPT
+# 2. READ AUTHORS
 inFile = sys.argv[1]
-
 with open(inFile) as file:
-    counter = 1
-    authors = ''
-    for line in file:
-        if counter != 1:
-            authors+=('+OR+'+'au:'+line.rstrip())
-        else:
-            authors+=('au:'+line.rstrip())
-        counter+=1
-    authors=('%28'+authors+'%29')
+    author_list = [line.strip() for line in file if line.strip()]
 
-response = requests.get("http://export.arxiv.org/api/query?search_query="+"%28"+categories+'+AND+'+authors+"%29"+"+AND+"+time_interval+'&start=0&max_results=100')
+# 3. PROCESS IN BATCHES
+batch_size = 10  # Smaller batches prevent "URL too long" and 429 errors
+all_entries = []
 
-if response.status_code!=200:
-    print(response.status_code)
+for author_chunk in chunk_list(author_list, batch_size):
+    # Assemble author string for this batch
+    authors_query = "+OR+".join(["au:" + a for a in author_chunk])
+    query_url = (
+        "http://export.arxiv.org/api/query?search_query="
+        "%28" + categories + "+AND+%28" + authors_query + "%29%29"
+        "+AND+" + time_interval + "&start=0&max_results=100"
+    )
 
-#print(response.text)
+    # print(f"Fetching batch: {author_chunk[0]}... ({len(author_chunk)} authors)")
 
-#TAKES THE RESPONSE AND CREATES THE OUTPUT
+    response = requests.get(query_url)
 
-import feedparser
+    if response.status_code == 200:
+        feed = feedparser.parse(response.text)
+        all_entries.extend(feed.entries)
+    elif response.status_code == 429:
+        print("Error 429: Rate limited. Try increasing the sleep timer.")
+        break
+    else:
+        print(f"Error {response.status_code} for batch.")
 
-#feed = feedparser.parse(response.url)
-feed = feedparser.parse(response.text)
+    # arXiv asks for a 3-second delay between hits
+    time.sleep(3)
 
-feed_entries = feed.entries
-counter = 1
-for entry in feed.entries:
+# 4. REMOVE DUPLICATES (If an article has multiple authors from your list)
+unique_entries = {e.id: e for e in all_entries}.values()
 
-    article_title = entry.title
-    article_link = entry.link
-    article_published_at = entry.published # Unicode string
-    article_published_at_parsed = entry.published_parsed # Time object
-    article_authors = '%s' % ', '.join(author.name for author in entry.authors)
-    content = entry.summary
-    article_tags = '%s' % ', '.join(tag.term for tag in entry.tags)
+# 5. PRINT RESULTS
+print("\n" + "="*64)
+for i, entry in enumerate(unique_entries, 1):
+    article_authors = ', '.join(author.name for author in entry.authors)
+    article_tags = ', '.join(tag.term for tag in entry.tags)
 
-
-    print ("{}) {}\nby {}".format(counter,article_title,article_authors))
-    print ("{}\n{}".format(article_tags, article_link))
-    print ("Published at {}".format(article_published_at))
-    print("-"*64)
-    # print("Content {}".format(content))
-
-    counter = counter + 1
+    print("{}) {}\nby {}".format(i, entry.title, article_authors))
+    print("{}\n{}".format(article_tags, entry.link))
+    print("Published at {}".format(entry.published))
+    print("-" * 64)
