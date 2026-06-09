@@ -15,7 +15,7 @@ def chunk_list(lst, n):
 today = datetime.now().strftime("%Y%m%d") + '0600'
 day_of_week = datetime.today().weekday()
 
-if day_of_week == 0:
+if day_of_week == 0 or day_of_week == 1:
     yesterday = (datetime.today() - timedelta(days=4)).strftime("%Y%m%d") + '0001'
 else:
     yesterday = (datetime.today() - timedelta(days=2)).strftime("%Y%m%d") + '0001'
