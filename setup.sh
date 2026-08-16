@@ -43,7 +43,7 @@ SENDER_NAME="${SENDER_NAME:-Morning eXpresso}"
 read -r -p "Email subject [eXpresso]: " EMAIL_SUBJECT
 EMAIL_SUBJECT="${EMAIL_SUBJECT:-eXpresso}"
 
-read -r -s -p "Gmail app password (input hidden): " EMAIL_PASS
+read -r -s -p "Gmail app password (input hidden) (generate from App Password in your Google Account): " EMAIL_PASS
 echo
 if [[ -z "$EMAIL_PASS" ]]; then
     echo "The Gmail app password cannot be empty."

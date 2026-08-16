@@ -28,12 +28,16 @@ gh workflow run send_email.yml
 
 ```text
 .
-├── arxiv_query.py
-├── authors_list
-├── requirements.txt
-├── setup.sh
-├── send_test_email.py
-└── .github
-    └── workflows
-        └── send_email.yml
+├── arxiv_query.py  
+├── authors_list  
+├── authors_test  
+├── .github  
+│   └── workflows  
+│       └── send_email.yml  
+├── .gitignore  
+├── README.md  
+├── requirements.txt  
+├── send_test_email.py  
+└── setup.sh  
+
 ```
