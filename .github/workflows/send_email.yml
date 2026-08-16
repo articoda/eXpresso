@@ -1,4 +1,4 @@
-name: Send Test Email
+name: eXpresso
 
 on:
   schedule:
@@ -12,7 +12,7 @@ jobs:
       output1: ${{ steps.opening.outputs.output1 }}
       output2: ${{ steps.arXiv.outputs.output2 }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -22,32 +22,35 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install requests feedparser
+          pip install -r requirements.txt
 
       - name: Write email opening
         id: opening
+        env:
+          RECIPIENT_NAME: ${{ vars.RECIPIENT_NAME }}
         run: |
-          echo "output1<<EOF" >> $GITHUB_OUTPUT
-          echo "Good morning Daniele!" >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
-          echo "Here are the interesting entries from the arXiv." >> $GITHUB_OUTPUT
-          echo "" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          name="${RECIPIENT_NAME:-there}"
+          echo "output1<<EOF" >> "$GITHUB_OUTPUT"
+          echo "Good morning ${name}!" >> "$GITHUB_OUTPUT"
+          echo "" >> "$GITHUB_OUTPUT"
+          echo "Here are the interesting entries from the arXiv." >> "$GITHUB_OUTPUT"
+          echo "" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Check the arXiv
         id: arXiv
         run: |
             result=$(python3 arxiv_query.py authors_list)
-            echo "output2<<EOF" >> $GITHUB_OUTPUT
-            echo "$result" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            echo "output2<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$result" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
 
   send-email:
     runs-on: ubuntu-latest
     needs: generate-body
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -64,4 +67,6 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           OUTPUT1: ${{ needs.generate-body.outputs.output1 }}
           OUTPUT2: ${{ needs.generate-body.outputs.output2 }}
+          SENDER_NAME: ${{ vars.SENDER_NAME }}
+          EMAIL_SUBJECT: ${{ vars.EMAIL_SUBJECT }}
         run: python send_test_email.py "$OUTPUT1" "$OUTPUT2"

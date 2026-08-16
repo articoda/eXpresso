@@ -1,1 +1,25 @@
+# Editor/temporary files
 *.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Local secrets/configuration
+.env
+.env.*
+!.env.e# Editor/temporary files
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Local secrets/configuration
+.env
+.env.*
+!.env.example
