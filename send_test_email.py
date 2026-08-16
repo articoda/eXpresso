@@ -13,7 +13,7 @@ TO_ADDRESS = os.getenv('EMAIL_TO')
 # Create a text/plain message
 msg = EmailMessage()
 msg['Subject'] = 'eXpresso0.3'
-msg["From"] = formataddr(("Morning EXpresso", email_user))
+msg["From"] = formataddr(("Morning EXpresso", EMAIL_ADDRESS))
 msg['To'] = TO_ADDRESS
 msg.set_content('{}\n{}'.format(sys.argv[1],sys.argv[2]))
 
