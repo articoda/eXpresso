@@ -47,7 +47,10 @@ for author_chunk in chunk_list(author_list, batch_size):
 
     if response.status_code == 200:
         feed = feedparser.parse(response.text)
-        all_entries.extend(feed.entries)
+        all_entries.extend(
+            entry for entry in feed.entries
+            if len(entry.authors) < 20
+        )
     elif response.status_code == 429:
         print("Error 429: Rate limited. Try increasing the sleep timer.")
         break
