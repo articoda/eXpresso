@@ -4,9 +4,7 @@ import smtplib
 from email.message import EmailMessage
 import os
 import sys
-
-
-
+from email.utils import formataddr
 
 EMAIL_ADDRESS = os.getenv('EMAIL_USER')
 EMAIL_PASSWORD = os.getenv('EMAIL_PASS')
@@ -15,7 +13,7 @@ TO_ADDRESS = os.getenv('EMAIL_TO')
 # Create a text/plain message
 msg = EmailMessage()
 msg['Subject'] = 'eXpresso0.3'
-msg['From'] = EMAIL_ADDRESS
+msg["From"] = formataddr(("Morning EXpresso", email_user))
 msg['To'] = TO_ADDRESS
 msg.set_content('{}\n{}'.format(sys.argv[1],sys.argv[2]))
 
