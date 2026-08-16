@@ -1,4 +1,4 @@
-This little bot sends an email every morning with entries from arXiv generated in arxiv_query.py.
+This little bot sends an email every morning with entries from arXiv generated in arxiv_query.py.\n
 For comments or suggestions email daniele.artico@unipr.it
 
 .
