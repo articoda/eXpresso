@@ -28,7 +28,7 @@ jobs:
         id: opening
         run: |
           echo "output1<<EOF" >> $GITHUB_OUTPUT
-          echo "This is your third round of test emails!" >> $GITHUB_OUTPUT
+          echo "Good morning Daniele!" >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
           echo "Here are the interesting entries from the arXiv." >> $GITHUB_OUTPUT
           echo "" >> $GITHUB_OUTPUT
